@@ -48,6 +48,32 @@ return {
       scroll = { enabled = true }, -- smooth scrolling
       indent = { enabled = true }, -- animated indent guides
 
+      -- The explorer uses the "sidebar" preset, whose input is height 1 but
+      -- wrapped in `border = true` -- a full box, so it eats three rows and
+      -- carries a centred title. Respell the layout with the input styled
+      -- like the `ivy` preset does it: one row plus a single rule underneath.
+      picker = {
+        sources = {
+          explorer = {
+            layout = {
+              preview = false,
+              layout = {
+                backdrop = false,
+                width = 40,
+                min_width = 40,
+                height = 0,
+                position = "left",
+                border = "none",
+                box = "vertical",
+                { win = "input", height = 1, border = "bottom" },
+                { win = "list", border = "none" },
+                { win = "preview", title = "{preview}", height = 0.4, border = "top" },
+              },
+            },
+          },
+        },
+      },
+
       terminal = {
         win = {
           -- snacks windows default to `position = "float"`, and a float maps
@@ -56,9 +82,15 @@ return {
           -- else. A bottom split also makes it resizable with <C-w>+/-.
           position = "bottom",
           height = 0.35,
-          -- Point the terminal window back at plain Normal, which is
-          -- transparent, so it shows Ghostty's backdrop like the editor does.
-          wo = { winhighlight = "Normal:Normal,NormalNC:Normal" },
+          wo = {
+            -- Point the terminal window back at plain Normal, which is
+            -- transparent, so it shows Ghostty's backdrop like the editor.
+            winhighlight = "Normal:Normal,NormalNC:Normal",
+            -- Non-float terminals get a winbar of "<id>: <term_title>"
+            -- (snacks/terminal.lua:95). With a single terminal the id is
+            -- just noise, so drop the bar entirely.
+            winbar = "",
+          },
         },
       },
     },
