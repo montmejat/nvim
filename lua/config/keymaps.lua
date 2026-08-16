@@ -13,3 +13,12 @@ for _, key in ipairs({ "h", "j", "k", "l" }) do
     desc = "Go to " .. key .. " window",
   })
 end
+
+-- In terminal mode <C-w> is not a window command -- it goes to the shell,
+-- where readline reads it as "delete previous word". Turn it into the window
+-- prefix instead, so <C-w>+ / <C-w>- / <C-w>_ resize the terminal split
+-- straight from the shell without leaving terminal mode first.
+--
+-- Trade-off: the shell no longer receives <C-w>. Use <C-\><C-n> then <C-w>
+-- if you'd rather keep delete-word.
+vim.keymap.set("t", "<C-w>", "<C-\\><C-n><C-w>", { desc = "Window prefix" })
